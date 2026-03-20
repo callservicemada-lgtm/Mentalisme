@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="mg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MENTAL - MAHAITIA Elite Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #010409;
+            --accent: #00f2ff;
+            --purple: #bc13fe;
+            --glass: rgba(10, 15, 25, 0.9);
+            --border: rgba(0, 242, 255, 0.3);
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            margin: 0; font-family: 'Montserrat', sans-serif;
+            background: var(--bg); color: #fff; overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% 50%, #0d1117 0%, #010409 100%);
+        }
+
+        /* --- BACKGROUND DECORATION --- */
+        .cards-decor {
+            position: fixed; width: 100%; height: 100%;
+            pointer-events: none; overflow: hidden; z-index: -1;
+        }
+        .mini-card {
+            position: absolute; width: 35px; height: 50px;
+            border: 1px solid var(--purple); border-radius: 4px;
+            background: rgba(188, 19, 254, 0.05);
+            animation: floatCards 12s linear infinite; opacity: 0.15;
+        }
+        @keyframes floatCards {
+            0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+            50% { opacity: 0.3; }
+            100% { transform: translateY(-15vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* --- LOGO MAHAITIA & MASO TOKANA --- */
+        header { padding: 40px 20px; text-align: center; position: relative; }
+
+        .logo-wrapper {
+            position: relative; width: 180px; height: 180px;
+            margin: 0 auto 20px; display: flex;
+            justify-content: center; align-items: center;
+        }
+
+        .logo-text-svg {
+            position: absolute; width: 100%; height: 100%;
+            animation: rotateText 20s linear infinite;
+        }
+
+        @keyframes rotateText {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .logo-text-svg text {
+            fill: var(--accent); font-family: 'Orbitron';
+            font-size: 14px; font-weight: bold; letter-spacing: 4px;
+            text-transform: uppercase; text-shadow: 0 0 5px var(--accent);
+        }
+
+        .eye-container {
+            width: 70px; height: 70px; background: rgba(0,0,0,0.5);
+            border: 2px solid var(--accent); border-radius: 50% 10%;
+            transform: rotate(45deg); display: flex;
+            justify-content: center; align-items: center;
+            box-shadow: 0 0 25px var(--accent);
+            animation: blinkEye 5s ease-in-out infinite;
+        }
+
+        .pupil {
+            width: 22px; height: 22px; background: #000;
+            border-radius: 50%; border: 2px solid var(--accent);
+            position: relative;
+        }
+        .pupil::after {
+            content: ""; position: absolute; top: 4px; left: 4px;
+            width: 6px; height: 6px; background: #fff; border-radius: 50%;
+        }
+
+        @keyframes blinkEye {
+            0%, 90%, 100% { transform: rotate(45deg) scaleY(1); }
+            95% { transform: rotate(45deg) scaleY(0.1); }
+        }
+
+        /* --- BRAIN ANIMATION --- */
+        .brain-mini {
+            width: 60px; height: 60px; margin: 10px auto;
+            fill: var(--purple); animation: pulseBrain 2s infinite alternate;
+        }
+        @keyframes pulseBrain {
+            from { transform: scale(1); filter: drop-shadow(0 0 5px var(--purple)); }
+            to { transform: scale(1.2); filter: drop-shadow(0 0 15px var(--purple)); }
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif; font-size: 2.2rem; margin: 5px 0;
+            letter-spacing: 10px; color: #fff; text-shadow: 0 0 15px var(--accent);
+        }
+
+        /* --- GRID LIST (FENETRE) --- */
+        .chapter-list {
+            padding: 20px; max-width: 500px; margin: auto;
+            display: grid; gap: 18px; padding-bottom: 60px;
+        }
+
+        .card {
+            height: 110px; background: var(--glass); border-radius: 12px;
+            border: 1px solid var(--border); display: flex; align-items: center;
+            overflow: hidden; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+        .card:active { transform: scale(0.95); border-color: var(--accent); }
+
+        .card-img {
+            width: 30%; height: 100%; background-size: cover; background-position: center;
+            border-right: 1px solid var(--accent); filter: grayscale(30%);
+        }
+        .card-info { width: 70%; padding: 12px; }
+        .card-info h2 { font-family: 'Orbitron'; font-size: 0.8rem; margin: 0; color: var(--accent); }
+        .card-info p { font-size: 0.65rem; margin: 4px 0 0; opacity: 0.6; line-height: 1.3; }
+
+        /* --- MODAL --- */
+        .modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #010409; z-index: 2000; display: none; overflow-y: auto;
+        }
+        .modal-header {
+            padding: 15px 20px; background: #0d1117; border-bottom: 2px solid var(--accent);
+            display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 100;
+        }
+        .back-btn {
+            background: var(--accent); color: #000; border: none;
+            padding: 8px 16px; border-radius: 5px; font-family: 'Orbitron';
+            font-weight: bold; cursor: pointer;
+        }
+
+        .lesson-body { padding: 25px 20px; line-height: 1.7; }
+        .section-card {
+            background: rgba(255,255,255,0.03); border-left: 3px solid var(--purple);
+            padding: 18px; margin-bottom: 20px; border-radius: 0 8px 8px 0;
+        }
+        .section-card h3 { color: var(--accent); font-family: 'Orbitron'; font-size: 0.9rem; margin-top: 0; }
+        .example-box {
+            background: rgba(0, 242, 255, 0.04); padding: 12px; border-radius: 6px;
+            margin: 8px 0; border: 1px dashed rgba(0, 242, 255, 0.3); font-style: italic; font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="cards-decor" id="cardDecor"></div>
+
+<header>
+    <div class="logo-wrapper">
+        <svg class="logo-text-svg" viewBox="0 0 200 200">
+            <path id="circlePath" d="M 100, 100 m -80, 0 a 80,80 0 1,1 160,0 a 80,80 0 1,1 -160,0" fill="transparent"/>
+            <text>
+                <textPath xlink:href="#circlePath">
+                    MAHAITIA • MENTALISME • MAHAITIA • MENTALISME •
+                </textPath>
+            </text>
+        </svg>
+        <div class="eye-container">
+            <div class="pupil"></div>
+        </div>
+    </div>
+
+    <h1>MENTAL</h1>
+    
+    <svg class="brain-mini" viewBox="0 0 512 512">
+        <path d="M416 128c-12.38 0-24.46 2.251-35.61 6.415C365.1 82.5 314.1 48 256 48s-109.1 34.5-124.4 86.42C120.5 130.3 108.4 128 96 128c-53.02 0-96 42.98-96 96s42.98 96 96 96c12.38 0 24.46-2.251 35.61-6.415C146.9 365.5 197.9 400 256 400s109.1-34.5 124.4-86.42C391.5 317.7 403.6 320 416 320c53.02 0 96-42.98 96-96S469 128 416 128z"/>
+    </svg>
+</header>
+
+<div class="chapter-list" id="chapterContainer"></div>
+
+<div id="lessonModal" class="modal">
+    <div class="modal-header">
+        <span id="headerTitle" style="font-family:'Orbitron'; font-size: 0.7rem; color: var(--accent);">CLASSIFIED DATA</span>
+        <button class="back-btn" onclick="closeModal()">MIVERINA</button>
+    </div>
+    <div class="lesson-body" id="modalBody"></div>
+</div>
+
+<script>
+    // Karatra manidina
+    const decor = document.getElementById('cardDecor');
+    for(let i=0; i<15; i++) {
+        let card = document.createElement('div');
+        card.className = 'mini-card';
+        card.style.left = Math.random() * 100 + 'vw';
+        card.style.animationDelay = Math.random() * 12 + 's';
+        decor.appendChild(card);
+    }
+
+    // Database 20 Chapitres
+    const chapters = [
+        { id: 1, img: "https://images.unsplash.com/photo-1551392505-f4056bb3abd1?w=400", title: "Suggestion Subliminale", def: "Ny fahaizana mamboly hevitra ao anatin'ny subconscient nefa tsy tsapan'ny saina lojika.", explain: "Ny atidoha dia mandray vaovao an'arivony isan-tsegondra. Ny mentaliste dia mampiasa 'keywords' miverimberina mba hitarika ny fanapahan-kevitry ny hafa. Rehefa milamina ny saina, dia misokatra ny varavaran'ny fanahy.", examples: ["Mampiasa soso-kevitra an-kolaka: 'Tsy haiko raha ho gaga ianao hahatsapa ny fitokiako...'", "Miteny moramora ny teny hoe 'Eny' rehefa mametraka fanontaniana.", "Fampiasana sary an-tsaina mialoha ny tena zavatra hitranga."], end: "Ny teny dia hery, ampiasao amim-pahendrena." },
+        { id: 2, img: "https://images.unsplash.com/photo-1516062423079-7ca13cdc7f5a?w=400", title: "The Alpha Eye Contact", def: "Fifandraisana maso izay mibaiko sy manintona tsy misy teny hivoaka.", explain: "Ny maso no varavaran'ny fanahy. Ny fijery 'Alpha' dia tsy fijery masiaka, fa fijery milamina sy mahitsy. Ny mpanjaka dia tsy mikipy maso haingana loatra rehefa miresaka amin'ny olona.", examples: ["Ny 'Triangle gaze' (Maso havia -> Maso havanana -> Molony).", "Fijerena mahitsy mandritra ny 4 segondra vao mivily kely.", "Fijerena ny masony eo am-pihomehezana mba hamoronana fifandraisana lalina."], end: "Ny olona mifehy ny fijery no mifehy ny resaka." },
+        { id: 3, img: "https://images.unsplash.com/photo-1518152006812-edab29b069ac?w=400", title: "Pattern Interrupt", def: "Teknika mampiato ny fisainana lojika amin'ny alalan'ny fahatairana kely.", explain: "Rehefa tapahinao tampoka ny 'pattern' mahazatra, dia miditra ao anatin'ny 'trance' kely ny atidoha, ary mora handray baiko.", examples: ["Manontany zavatra tsy mifanaraka amin'ny resaka tampoka.", "Mijanona eo am-pitenenana ary mijery any an-kafa.", "Manolotra zavatra eo am-pametrahana fanontaniana sarotra."], end: "Ny fisavoritahana no varavaran'ny fankatoavana." },
+        { id: 4, img: "https://images.unsplash.com/photo-1523944339743-0fe06f079939?w=400", title: "Cold Reading Master", def: "Famakiana ny toetra sy ny tantaran'ny olona iray amin'ny alalan'ny fandinihana.", explain: "Ny mentaliste dia mijery ny antsipiriany: ny kiraro, ny tanana, ny fomba fiteny. Ny tanjona dia ny hiteny zavatra izay hoatry ny hoe ianao ihany no mahalala azy.", examples: ["'Olona manana fahaizana miafina ianao izay mbola tsy nampiasainao.'", "'Tsapako fa nisy fotoana ianao nahatsiaro ho irery na dia teo anivon'ny olona aza.'"], end: "Ny maso mahay mandinika dia mahita ny tsiambaratelo." },
+        { id: 5, img: "https://images.unsplash.com/photo-1516251193007-45ef944ab0c6?w=400", title: "Push & Pull Seduction", def: "Teknika mampisalasala ny fihetseham-po mba hamoronana attraction.", explain: "Raha midera loatra ianao, dia hiala izy. Ny fahaizana mampifandanja ny fiderana sy ny fanesoana kely no mamatotra azy aminao.", examples: ["'Tsara be ilay akanjonao... saingy ny toetranao no mila amboarina kely.'", "Miresaka mafana fo, avy eo mivadika mangatsiaka kely indray."], end: "Ny fisalasalana no miteraka fahalianana." },
+        { id: 6, img: "https://images.unsplash.com/photo-1554151228-14d9def656e4?w=400", title: "Micro-Expressions", def: "Famakiana ny fihetseham-po miafina ao amin'ny tarehy.", explain: "Misy fihetsika kely (1/25 segondra) izay tsy hay fehezina. Ny fiakarana kely amin'ny molotra dia mariky ny fanamavoana na fitiavana miafina.", examples: ["Jereo ny vavorony: raha mihalehibe dia misy fientanentanana.", "Jereo ny hodi-maso: raha mikipy matetika loatra dia mandainga."], end: "Ny tarehy dia tsy mahay mandainga." },
+        { id: 7, img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400", title: "The Anchoring", def: "Fametrahana fatotra ara-tsaina eo amin'ny fihetseham-po.", explain: "Mampifandray fihetseham-po tsara amin'ny fihetsika iray (ohatra: mikasika ny sandry rehefa mihomehy izy).", examples: ["Mampiasa fofona manokana isaky ny mihaona.", "Mikasika ny sandriny amin'ny fotoana maha-faly indrindra azy."], end: "Fehezo ny fahatsiarovany, dia fehezinao ny fony." },
+        { id: 8, img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400", title: "Social Proof", def: "Fanehoana fa manana lanja ianao eo imason'ny hafa.", explain: "Ny olona dia voasarik'izay lehilahy efa tian'ny maro na manana 'authority'.", examples: ["Miarahaba ny rehetra amin'ny fomba 'Alpha'.", "Asehoy fa be atao ianao ary manana tetikasa lehibe."], end: "Ny olona manana lanja dia tadiavin'ny rehetra." },
+        { id: 9, img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400", title: "The Art of Teasing", def: "Fanesoana kely am-pitiavana mba hamoronana tension.", explain: "Ny teasing dia mampiseho fa tsy matahotra azy ianao ary manana fahatokisan-tena ambony.", examples: ["'Hoatry ny zazakely ianao rehefa tezitra kely.'", "'Aza mijery ahy hoatry ny hoe hohaninao izany aho.'"], end: "Ny vazivazy no lalana fohy indrindra." },
+        { id: 10, img: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=400", title: "Subliminal Messaging", def: "Hafatra miafina ao anaty resaka mahazatra.", explain: "Mampiasa teny mandrisika ny atidohany hisaina zavatra iray nefa tsy hitany mivantana.", examples: ["Mampiasa teny toy ny 'akaiky', 'fitokisana' matetika.", "Mampiasa sary an-teny momba ny fifandraisana lalina."], end: "Ny hafatra miafina no tena miasa mafy." },
+        { id: 11, img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400", title: "Hand Gestures", def: "Fampiasana ny tanana mba hibaiko ny saina.", explain: "Ny tanana misokatra dia maneho fahitsiana. Ny rantsan-tanana mivondrona (steepling) dia maneho fahefana.", examples: ["Steepling: Atambatra ny lohan'ny rantsan-tanana.", "Palm down: Mampitony resaka na manome baiko."], end: "Ny tanana dia miteny mafy kokoa." },
+        { id: 12, img: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400", title: "Mirroring & Rapport", def: "Fakan-tahaka ny fihetsiky ny hafa mba hamoronana fifampitokisana.", explain: "Raha mitovy ny fihetsika, dia mieritreritra ny atidoha fa 'mitovy' sy 'azo itokisana' ianareo.", examples: ["Alao tahaka ny fomba fipetrany afaka segondra vitsy.", "Ampiasao ny teny fampiasany matetika."], end: "Ny fitoviana dia miteraka fitiavana." },
+        { id: 13, img: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400", title: "The Scarcity", def: "Ny herin'ny tsy fahafahana mahazo zavatra malalaka.", explain: "Izay zavatra sarotra azo no sarobidy. Aza mampiseho fa malalaka foana ianao.", examples: ["Aza mamaly hafatra avy hatrany foana.", "Mifarana voalohany ny resaka."], end: "Izay tsy eo no tadiavina." },
+        { id: 14, img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400", title: "Voice Tonality", def: "Fampiasana ny feo mba hitaoman-tsaina.", explain: "Ny feo lalina sy miadana dia maneho fahefana. Ny feo miakatra dia mariky ny tsy fahatokisana.", examples: ["Ampidino ny feo any amin'ny faran'ny fehezanteny.", "Mampiasà fiatoana alohan'ny teny manan-danja."], end: "Ny fomba ilazana azy no zava-dehibe." },
+        { id: 15, img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400", title: "Lie Detection", def: "Fahafantarana ny lainga amin'ny alalan'ny vatana.", explain: "Ny mpanambaka dia mirona hikasika ny orony na hihantona amin'ny teny averimberina.", examples: ["Manontany fanontaniana iray ihany indroa amin'ny fomba samihafa.", "Jereo ny tongony: raha mitodika any am-baravarana dia te hiala izy."], end: "Ny marina dia hita foana." },
+        { id: 16, img: "https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?w=400", title: "Zeigarnik Effect", def: "Famoronana fahaliana tsy vita (Cliffhanger).", explain: "Ny atidoha dia tsy mahatanty zavatra 'tsy vita'. Tantaro ny tapany dia ajanony.", examples: ["'Misy zavatra tianao ho fantatra... fa lazaiko anao avy eo.'", "Mandefa hafatra misy mistery dia ajanony eo."], end: "Avelao izy haniry hahafantatra bebe kokoa." },
+        { id: 17, img: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=400", title: "Confidence Manifest", def: "Fanehoana fahatokisan-tena tanteraka amin'ny alalan'ny saina.", explain: "Raha mino ianao fa mendrika, dia hino izany koa ny hafa. Ny aura-nao no mibaiko.", examples: ["Mandeha mahitsy ary mibahana toerana.", "Miteny moramora nefa mazava."], end: "Ny fahatokisan-tena dia mifindra." },
+        { id: 18, img: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=400", title: "The Halo Effect", def: "Ny herin'ny fahatsaran'ny sary voalohany.", explain: "Raha tsara ny sary voalohany, ny atidoha dia hieritreritra fa manana toetra tsara hafa koa ianao.", examples: ["Fikarakarana ny endrika sy ny fahadiovana.", "Ny tsiky voalohany rehefa mifankahita."], end: "Ny sary voalohany no sarotra ovaina." },
+        { id: 19, img: "https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?w=400", title: "Space Control", def: "Fifehezana ny toerana manodidina anao.", explain: "Ny lehilahy manana fahefana dia mahazo aina na aiza na aiza misy azy.", examples: ["Miankina tsara amin'ny seza fa tsy miondrika.", "Mampiasa ny tanana malalaka rehefa manazava."], end: "Izay mifehy ny habaka no mifehy ny saina." },
+        { id: 20, img: "https://images.unsplash.com/photo-1506863530036-1efeddceb993?w=400", title: "Domination Protocol", def: "Fampifandraisana ny teknika rehetra ho lasa iray.", explain: "Ny tanjona farany dia ny tsy hahatsapany fa mampiasa teknika ianao, fa lasa fomba fiainana izany.", examples: ["Mampiasa Cold Reading mba hamoronana fahalianana.", "Mijanona ho mistery mandra-pahatongan'ny farany."], end: "Lasa fomba fiainana ny Mentalisme." }
+    ];
+
+    // Render list
+    const container = document.getElementById('chapterContainer');
+    chapters.forEach(ch => {
+        let card = document.createElement('div');
+        card.className = 'card';
+        card.onclick = () => openLesson(ch);
+        card.innerHTML = `
+            <div class="card-img" style="background-image: url('${ch.img}')"></div>
+            <div class="card-info">
+                <h2>${ch.id}. ${ch.title}</h2>
+                <p>${ch.def.substring(0, 55)}...</p>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+
+    function openLesson(ch) {
+        document.getElementById('headerTitle').innerText = ch.title.toUpperCase();
+        document.getElementById('modalBody').innerHTML = `
+            <h1 style="font-family:'Orbitron'; color:var(--accent); font-size:1.3rem; margin-bottom:20px;">${ch.title}</h1>
+            <div class="section-card"><h3>1. DEFINITION</h3><p>${ch.def}</p></div>
+            <div class="section-card"><h3>2. FANAZAVANA LAVA</h3><p>${ch.explain}</p></div>
+            <div class="section-card"><h3>3. EXEMPLE MARO</h3>${ch.examples.map(ex => `<div class="example-box">${ex}</div>`).join('')}</div>
+            <div class="section-card"><h3>4. FAMARANANA</h3><p>${ch.end}</p></div>
+        `;
+        document.getElementById('lessonModal').style.display = 'block';
+        window.scrollTo(0,0);
+    }
+
+    function closeModal() {
+        document.getElementById('lessonModal').style.display = 'none';
+    }
+</script>
+
+</body>
+</html>
